@@ -15,6 +15,28 @@ Gereksinimler (minimum):
 100 gb
 ```
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <h1 align="center">Paloma Node Kurulumu ve Cüzdan oluşturma</h1>
 
 Not: form kapandı, yeni form açılmadı, açılırsa telegramda duyururum, daha önce cüzdan kurduysanız script komutuna geçebilirsiniz.
@@ -53,7 +75,28 @@ DAHA ÖNCE CÜZDAN KURDUYSANIZ CÜZDAN OLUŞTURMAYIN SCRİPT KISMINDAN BAŞLAYIN
     //<moniker-isminiz> burayı degiştirin
     MONIKER="<moniker-isminiz>"
     palomad init "$MONIKER"
+    
+# cüzdan oluşturma
 
+
+          VALIDATOR=cüzdan ismi
+          palomad keys add "$VALIDATOR"
+
+çıkan bilgileri bir yere not edin.
+
+# false cıktını kontrol etme
+curl localhost:26657/status | jq .result.sync_info.catching_up
+# akıyomu kontrol :D çıkış için ctrl c
+journalctl -u palomad -f -o cat
+# delegate hatası alanlar
+Delege komutunda hata alan olursa alternatif olarak bunu deneyebilir.palomavaloper kısmını değiştiriceksiniz
+
+palomad tx staking delegate palomavaloper1ha6la5yj8cag70qkq9efjun2cc7rxu7qps48fa 900000ugrain --from=Coinstudy --chain-id=paloma-testnet-5 -y --fees=500ugrain --node "tcp://testnet.palomaswap.com:26657"
+
+# Faucet kodu
+
+ADDRESS="$(palomad keys show "cüzdan adı" -a)"
+JSON=$(jq -n --arg addr "$ADDRESS" '{"denom":"ugrain","address":$addr}') && curl -X POST --header "Content-Type: application/json" --data "$JSON" https://backend.faucet.palomaswap.com/claim
 
 # Default Ayarlar
 
